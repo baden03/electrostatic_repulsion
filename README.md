@@ -2,7 +2,7 @@
 ## Blender Script: Electrostatic Repulsion
 
 **A Blender Add-on for evenly distributing nodes on a sphere using Electrostatic Repulsion.**
-
+![demo](ep_sim.gif)
 ### Installation & Usage:
 
 1. **Launch Blender from the Command Line**:
