@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Electrical Repulsion",
     "author": "Twinpictures",
-    "version": (1, 0, 2),
+    "version": (1, 0, 3),
     "blender": (3, 6, 4),
     "location": "View3D > Tool Shelf > Tool",
     "description": "Evenly distribute nodes on a sphere using Electrostatic Repulsion.",
@@ -9,6 +9,7 @@ bl_info = {
 }
 
 import numpy as np
+import math
 import bpy
 
 def random_point_on_sphere(radius):
@@ -19,6 +20,91 @@ def random_point_on_sphere(radius):
     y = radius * np.sin(phi) * np.sin(theta)
     z = radius * np.cos(phi)
     return x, y, z
+
+def fibonacci_lattice_on_sphere(radius, num_points):
+    """Generate points on a sphere using a Fibonacci lattice."""
+    golden_ratio = (1 + 5 ** 0.5) / 2  # Golden Ratio
+    
+    points = []
+    for i in range(num_points):
+        # Calculate the inclination angle
+        theta = np.arccos(1 - 2 * (i + 0.5) / num_points)
+        
+        # Calculate the azimuthal angle
+        phi = 2 * np.pi * i / golden_ratio
+        
+        # Convert spherical coordinates to Cartesian coordinates
+        x = radius * np.sin(theta) * np.cos(phi)
+        y = radius * np.sin(theta) * np.sin(phi)
+        z = radius * np.cos(theta)
+        
+        points.append((x, y, z))
+
+    return points
+
+def spherical_coordinate(x, y):
+    """Convert given angles to spherical coordinates."""
+    return (
+        math.cos(x) * math.cos(y),
+        math.sin(x) * math.cos(y),
+        math.sin(y)
+    )
+
+def NX(n, x):
+    """Generate n points based on the method described in Kogan's paper."""
+    pts = []
+    
+    # Calculate the starting value and increment based on n
+    start = (-1. + 1. / (n - 1.))
+    increment = (2. - 2. / (n - 1.)) / (n - 1.)
+    
+    for j in range(n):
+        s = start + j * increment
+        # Calculate the spherical coordinates for each point
+        pts.append(
+            spherical_coordinate(
+                s * x, 
+                math.pi / 2. * math.copysign(1, s) * (1. - math.sqrt(1. - abs(s)))
+            )
+        )
+    return pts
+
+def kogan_points_on_sphere(radius, num_points):
+    """Generate points on a sphere using Kogan's method."""
+    pts_3D = NX(num_points, 0.1 + 1.2 * num_points)
+    
+    # Scale the points by the given radius
+    points = [(pt[0] * radius, pt[1] * radius, pt[2] * radius) for pt in pts_3D]
+    
+    return points
+
+def archimedes_points_on_sphere(radius, num_points):
+    """Generate points on a sphere using an Archimedean spiral."""
+    # Maximum theta value - this can be adapted based on the number of points and desired distribution
+    max_theta = np.sqrt(num_points) * np.pi
+    
+    # Generate theta values linearly
+    thetas = np.linspace(0, max_theta, num_points)
+    
+    points = []
+
+    for theta in thetas:
+        # Use the simplified Archimedean Spiral equation
+        r = theta
+        
+        # Convert r and theta to spherical coordinates
+        Z = radius * (1 - (r / max_theta) * 2)
+        R = np.sqrt(radius**2 - Z**2)
+        alpha = theta  # Reuse the theta value for the azimuthal angle
+        
+        # Convert to Cartesian coordinates
+        X = R * np.cos(alpha)
+        Y = R * np.sin(alpha)
+        
+        # Append the coordinates       
+        points.append((X, Y, Z))
+    
+    return points
 
 def electrostatic_repulsion(points, spheres, radius, iterations=500, time_step=0.005, k_constant=1, convergence_threshold=0):
     """Apply electrostatic repulsion to points until equilibrium, and animate the process."""    
@@ -112,6 +198,18 @@ class ElectricalRepulsionProperties(bpy.types.PropertyGroup):
         min=0.1,
         description="The distance from the origin to the nodes on the sphere."
     )
+    # Select the method for initial point distribution
+    point_distribution_method: bpy.props.EnumProperty(
+        name="Initial Position",
+        description="Select the method for initial point distribution",
+        items=[
+            ('RANDOM', "Random", "Distribute the initial points randomly"),
+            ('FIBONACCI', "Fibonacci", "Distribute the initial points using a Fibonacci lattice"),
+            ('KOGAN', "Kogan", "Distribute the initial points using the Kogan's Spiral method"),
+            ('ARCHIMEDES', "Archimedes", "Distribute the initial points using the Equidistant Archimedean Spiral method")
+        ],
+        default='RANDOM'
+    )
     # The maximum number of iterations to run the electrostatic repulsion algorithm. Increase if nodes are not stabilizing within the default limit.
     iterations: bpy.props.IntProperty(
         name="Iteration Limit",
@@ -164,6 +262,7 @@ class OBJECT_PT_electrical_repulsion(bpy.types.Panel):
         
         layout.prop(props, "num_points")
         layout.prop(props, "radius")
+        layout.prop(props, "point_distribution_method")
         layout.prop(props, "iterations")
         layout.prop(props, "convergence_threshold")
         layout.prop(props, "sphere_size")
@@ -185,6 +284,7 @@ class WM_OT_ElectricalRepulsionOperator(bpy.types.Operator):
         props = context.scene.electrical_repulsion_props
         num_points = props.num_points
         radius = props.radius
+        point_distribution_method = props.point_distribution_method
         iterations = props.iterations
         convergence_threshold = props.convergence_threshold
         sphere_size = props.sphere_size
@@ -192,7 +292,16 @@ class WM_OT_ElectricalRepulsionOperator(bpy.types.Operator):
         radius_print = props.radius_print if print_it else radius
 
         bpy.context.scene.frame_current = 1  # rewind to first frame
-        points = np.array([random_point_on_sphere(radius) for _ in range(num_points)])
+        
+        if point_distribution_method == "FIBONACCI":
+            points = np.array(fibonacci_lattice_on_sphere(radius, num_points))
+        elif point_distribution_method == "KOGAN":
+            points = np.array(kogan_points_on_sphere(radius, num_points))
+        elif point_distribution_method == "ARCHIMEDES":
+            points = np.array(archimedes_points_on_sphere(radius, num_points))
+        else:
+            points = np.array([random_point_on_sphere(radius) for _ in range(num_points)])
+
         spheres = create_spheres(points, sphere_size)
 
         # Run the repulsion with animation
