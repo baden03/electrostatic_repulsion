@@ -38,7 +38,6 @@
      - To view the generated coordinates, navigate to the Text Editor area in Blender and select "GeneratedCoords" from the list of text blocks.
 
 ### Future Improvements (TODO):
-- Have the main function `electrostatic_repulsion` processed in a separate thread to improve performance and responsiveness.
 - Toggle the button label from 'Apply Repulsion' to 'Abort Repulsion' while the script is processing, providing clearer user feedback.
 - Modify the function to allow the user to manually abort the process when 'Abort Repulsion' is clicked, adding more user control during execution.
 - Display a progress indicator or bar while the function is processing, giving users a real-time update on the simulation's progress.
