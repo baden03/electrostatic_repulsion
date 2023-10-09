@@ -23,6 +23,7 @@
      |---------------------------|-------------|
      | Number of Nodes           | The total number of nodes to distribute on the sphere. More nodes may require more iterations for a stable configuration. |
      | Distance from Origin      | The distance from the origin to the nodes on the sphere. A larger radius may affect the time to reach equilibrium. |
+     | Initial Position          | Select the method to be used for initial point distribution. |
      | Iteration Limit           | The maximum number of iterations to run the electrostatic repulsion algorithm. Increase if nodes are not stabilizing within the default limit. |
      | Convergence Threshold     | A threshold for the mean variation in max force over the last 100 iterations. A smaller value requires tighter convergence. |
      | Node Girth                | The size or radius of each node on the sphere. Adjust for visual clarity and spacing between nodes. |
@@ -48,14 +49,14 @@
 #### 1. Random Distribution
 - **Brief:** Simple random placement using azimuthal and polar angles.
 - **Description:** Nodes are placed using random azimuthal and polar angles. This method is simple but can lead to clustering and uneven distribution.
-- **Mathematical Description:** Nodes are placed using random azimuthal (\( \phi \)) and polar (\( \theta \)) angles:
+- **Mathematical Description:** Nodes are placed using random azimuthal ($\phi $) and polar ($ \theta $) angles:
 
-  \[
+  $
   \theta = 2 \pi \times \text{random number between 0 and 1}
-  \]
-  \[
+  $
+  $
   \phi = \arccos(2 \times \text{random number between -1 and 1} - 1)
-  \]
+  $
 
 #### 2. Fibonacci Lattice (Golden Spiral)
 - **Brief:** Uniform distribution using the golden ratio.
@@ -333,8 +334,50 @@ def kogan_sphere_points(samples, radius=1.0):
     
     return points
 ```
+#### 10. The Golden Spiral Phyllotaxis
+- **Brief:** Distribution method inspired by patterns found in nature.
+- **Description:** The Golden Spiral Phyllotaxis method is a way of distributing points evenly over the surface of a sphere. This method is inspired by patterns found in nature, such as the arrangement of seeds on a sunflower head or the scales of a pinecone. The idea is to use the golden ratio to distribute points evenly on a sphere. This method is often preferred over random distribution or other deterministic methods because it tends to provide an even distribution without visible clusters or gaps.
 
-#### 10. Voronoi Relaxation (Spherical Lloyd's Algorithm)
+The key property of the golden ratio is that it is "the most irrational number," meaning it provides the best resistance to forming simple fraction approximations. This property helps in avoiding clusters and gaps when distributing points on a sphere.
+- **Mathematical Description:**
+### 1. The Golden Angle:
+The Golden Angle (\( \phi \)) is based on the Golden Ratio (\( \Phi \)), which is approximately \( 1.61803398875 \). The Golden Angle is given by:
+
+\[
+\phi = 2\pi(1 - \frac{1}{\Phi}) = 2\pi(1 - \frac{1}{1.61803398875})
+\]
+
+### 2. Point Placement:
+For each point \( i \) (starting from \( i = 0 \) to \( n-1 \), where \( n \) is the total number of points, in this case, 80), the height (\( y_i \)) and the radius in the xy-plane (\( r_i \)) are calculated as:
+
+\[
+y_i = 1 - \frac{i}{n} - \frac{1}{2n}
+\]
+\[
+r_i = \sqrt{1 - y_i^2}
+\]
+
+### 3. Angle Calculation:
+The angle for each point is given by:
+
+\[
+\theta_i = \phi \times i
+\]
+
+### 4. Cartesian Coordinates:
+Finally, we can convert the cylindrical coordinates (\( r_i, \theta_i, y_i \)) to Cartesian coordinates:
+
+\[
+x_i = \cos(\theta_i) \times r_i
+\]
+\[
+y_i = \sin(\theta_i) \times r_i
+\]
+\[
+z_i = y_i
+\]
+
+#### 11. Voronoi Relaxation (Spherical Lloyd's Algorithm)
 - **Brief:** Voronoi-based iterative refinement.
 - **Description:** Starts with a random or structured distribution of nodes on the sphere. A Voronoi diagram is computed for these nodes on the spherical surface, and each node is moved to the centroid of its Voronoi cell. The process is repeated until convergence. This results in a distribution that minimizes the variance of distances between nodes, leading to a more uniform distribution.
 - **Mathematical Description:** Nodes are placed based on the Voronoi diagram computed on the spherical surface. Each node is then moved to the centroid of its Voronoi cell. The mathematical details involve the computation of the Voronoi diagram and centroids on the sphere.
@@ -362,14 +405,6 @@ Convergence: The process is repeated until the points move minimally between ite
 - **Principle:** Treat each point as a charged particle that repels other points, leading to a more uniform distribution.
 - **Mechanism:** In each iteration, for every pair of points, a repulsive force is computed based on their distance (like charged particles repelling each other). Points are then moved based on the resultant forces from all other points.
 Convergence: The process is repeated until the resultant forces on the points are below a certain threshold or until a specific number of iterations are reached.
-
-
-### Hmmm
-"Golden Spiral Phyllotaxis," which is inspired by patterns found in nature, such as the arrangement of sunflower seeds. The idea is to use the golden ratio to distribute points evenly on a sphere. This method is often preferred over random distribution or other deterministic methods because it tends to provide an even distribution without visible clusters or gaps.
-
-The key property of the golden ratio is that it is "the most irrational number," meaning it provides the best resistance to forming simple fraction approximations. This property helps in avoiding clusters and gaps when distributing points on a sphere.
-
-This "Golden Spiral Phyllotaxis" or "Sunflower Seed Arrangement" is closely related to the "Fibonacci Lattice" or "Fibonacci Spiral" method for distributing points on a sphere. Both methods are inspired by patterns in nature and leverage the golden ratio to achieve even distribution. However, there are key differences in their construction:
 
 ### Comparison: Golden Spiral Phyllotaxis vs. Fibonacci Lattice
 
@@ -402,8 +437,3 @@ This "Golden Spiral Phyllotaxis" or "Sunflower Seed Arrangement" is closely rela
 
 
 In essence, while both methods utilize the properties of the golden ratio to evenly distribute points on a sphere, their specific approaches and resulting patterns can be different. However, in practice, both methods yield very similar distributions, and the differences are often subtle. The choice between them usually depends on the specific application or personal preference.
-
-
-
-
-
