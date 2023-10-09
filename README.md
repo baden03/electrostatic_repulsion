@@ -49,7 +49,7 @@
 #### 1. Random Distribution
 - **Brief:** Simple random placement using azimuthal and polar angles.
 - **Description:** Nodes are placed using random azimuthal and polar angles. This method is simple but can lead to clustering and uneven distribution.
-- **Mathematical Description:** Nodes are placed using random azimuthal ($\phi$) and polar ($\theta$) angles:
+- **Mathematical Description:** Nodes are placed using random azimuthal ( $\phi$ ) and polar ( $\theta$ ) angles:
 
  $\theta = 2 \pi \times \text{random number between 0 and 1}$
  $\phi = \arccos(2 \times \text{random number between -1 and 1} - 1)$
@@ -59,14 +59,14 @@
 - **Description:** The Fibonacci Lattice method generates points on a sphere based on the properties of the Fibonacci sequence and the golden ratio. This method aims to distribute points approximately uniformly across the surface of the sphere.
 - **Mathematical Description:**
 1. **Golden Ratio**:
-    - The golden ratio, often denoted as$\phi$, is calculated as:
+    - The golden ratio, often denoted as $\phi$, is calculated as:
    $$\phi = \frac{1 + \sqrt{5}}{2}$$
 
 2. **Spherical Coordinates Calculation**:
-    - For each point `i` from 0 to$N-1$ (where$N$ is the number of points):
-        - Inclination Angle$\theta$:
+    - For each point `i` from 0 to $N-1$ (where $N$ is the number of points):
+        - Inclination Angle $\theta$:
        $$\theta = \arccos\left(1 - 2 \times \frac{i + 0.5}{N}\right)$$
-        - Azimuthal Angle$\phi$:
+        - Azimuthal Angle $\phi$:
        $$\phi = 2\pi \times \frac{i}{\text{golden ratio}}$$
 
 3. **Conversion to Cartesian Coordinates**:
@@ -157,21 +157,21 @@ def fibonacci_lattice_on_sphere(radius, num_points):
 - **Description:** Uses the Archimedean spiral properties in the plane and projects them onto the sphere. This approach provides a fairly uniform initial distribution.
 - **Mathematical Description:**
 1. **Theta Calculation**:
-    - The spiral is defined by the angle$\theta$, which varies linearly from 0 to a maximum value,$`\text{max\_theta}`$.
-    - The$`\text{max\_theta}`$ value is determined based on the desired number of points,$N$, and can be adjusted to ensure the spiral wraps around the sphere sufficiently:
+    - The spiral is defined by the angle $\theta$, which varies linearly from 0 to a maximum value, $`\text{max\_theta}`$.
+    - The $`\text{max\_theta}`$ value is determined based on the desired number of points, $N$, and can be adjusted to ensure the spiral wraps around the sphere sufficiently:
    $`\text{max\_theta} = \sqrt{N} \times \pi`$
     
 2. **Radius Calculation**:
-    - For each value of$\theta$, a corresponding radius$r$ is computed in polar coordinates:
+    - For each value of $\theta$, a corresponding radius $r$ is computed in polar coordinates:
    $$r = \theta$$
 
 3. **Spherical Coordinates**:
-    - Convert the polar radius$r$ and angle$\theta$ to spherical coordinates (R,$\alpha$, Z):
+    - Convert the polar radius $r$ and angle $\theta$ to spherical coordinates (R, $\alpha$, Z):
         - Z-coordinate (height on the sphere):
        $`Z = \text{radius} \times \left(1 - \frac{r}{\text{max\_theta}} \times 2\right)`$
         - R-coordinate (distance from the center of the sphere to a point on its surface at a given height Z):
        $$R = \sqrt{\text{radius}^2 - Z^2}$$
-        -$\alpha$ is the azimuthal angle and is reused from the$\theta$ value.
+        - $\alpha$ is the azimuthal angle and is reused from the $\theta$ value.
 
 4. **Cartesian Coordinates**:
     - Convert the spherical coordinates to Cartesian coordinates:
@@ -313,12 +313,12 @@ def kogan_sphere_points(samples, radius=1.0):
 The key property of the golden ratio is that it is "the most irrational number," meaning it provides the best resistance to forming simple fraction approximations. This property helps in avoiding clusters and gaps when distributing points on a sphere.
 - **Mathematical Description:**
 ### 1. The Golden Angle:
-The Golden Angle ($\phi$) is based on the Golden Ratio ($\Phi$), which is approximately$1.61803398875$. The Golden Angle is given by:
+The Golden Angle ( $\phi$ ) is based on the Golden Ratio ( $\Phi$ ), which is approximately $1.61803398875$. The Golden Angle is given by:
 
 $$\phi = 2\pi(1 - \frac{1}{\Phi}) = 2\pi(1 - \frac{1}{1.61803398875})$$
 
 ### 2. Point Placement:
-For each point$i$ (starting from$i = 0$ to$n-1$, where$n$ is the total number of points, in this case, 80), the height ($y_i$) and the radius in the xy-plane ($r_i$) are calculated as:
+For each point$i$ (starting from $i = 0$ to $n-1$, where $n$ is the total number of points, in this case, 80), the height ( $y_i$ ) and the radius in the xy-plane ( $r_i$ ) are calculated as:
 
 $$y_i = 1 - \frac{i}{n} - \frac{1}{2n}$$
 $$r_i = \sqrt{1 - y_i^2}$$
@@ -329,7 +329,7 @@ The angle for each point is given by:
 $$\theta_i = \phi \times i$$
 
 ### 4. Cartesian Coordinates:
-Finally, we can convert the cylindrical coordinates ($r_i, \theta_i, y_i$) to Cartesian coordinates:
+Finally, we can convert the cylindrical coordinates ( $r_i, \theta_i, y_i$ ) to Cartesian coordinates:
 
 $$x_i = \cos(\theta_i) \times r_i$$
 $$y_i = \sin(\theta_i) \times r_i$$
@@ -366,12 +366,12 @@ Convergence: The process is repeated until the resultant forces on the points ar
 
 ### Comparison: Golden Spiral Phyllotaxis vs. Fibonacci Lattice
 
-1. **Formula for$\theta$ (or$\alpha$)**:
+1. **Formula for $\theta$ (or $\alpha$)**:
     - **Golden Spiral Phyllotaxis**: 
-        - The angle$\alpha$ (or$\theta$ in some descriptions) is determined using the golden ratio:
+        - The angle $\alpha$ (or $\theta$ in some descriptions) is determined using the golden ratio:
        $`\alpha = \text{golden\_ratio} \times 2\pi \times \text{counter}`$
     - **Fibonacci Lattice**: 
-        - The angle$\theta$ between successive points in the horizontal plane is a constant increment:
+        - The angle $\theta$ between successive points in the horizontal plane is a constant increment:
        $`\Delta \theta = 2\pi \times \text{golden\_ratio}^{-1}`$
 
 2. **Z Coordinate Calculation**:
