@@ -49,14 +49,10 @@
 #### 1. Random Distribution
 - **Brief:** Simple random placement using azimuthal and polar angles.
 - **Description:** Nodes are placed using random azimuthal and polar angles. This method is simple but can lead to clustering and uneven distribution.
-- **Mathematical Description:** Nodes are placed using random azimuthal ($\phi $) and polar ($ \theta $) angles:
+- **Mathematical Description:** Nodes are placed using random azimuthal ($\phi $) and polar ($\theta $) angles:
 
-  $
-  \theta = 2 \pi \times \text{random number between 0 and 1}
-  $
-  $
-  \phi = \arccos(2 \times \text{random number between -1 and 1} - 1)
-  $
+  $$\theta = 2 \pi \times \text{random number between 0 and 1}
+  \phi = \arccos(2 \times \text{random number between -1 and 1} - 1)$$
 
 #### 2. Fibonacci Lattice (Golden Spiral)
 - **Brief:** Uniform distribution using the golden ratio.
