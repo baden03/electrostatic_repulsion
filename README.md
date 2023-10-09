@@ -237,7 +237,7 @@ def archimedes_points_on_sphere(radius, num_points):
 
 #### 9. Kogan's Spiral Method (2017)
 - **Brief:** Uses a special spiral for efficient placements.
-- **Description:** A computationally efficient method introduced by Jonathan Kogan in 2017. It uses a spiral determined through experimental evidence. The method achieves spacings close to theoretical bounds and is especially efficient for a large number of nodes.
+- **Description:** A computationally efficient method introduced by [Jonathan Kogan in 2017](https://scholar.rose-hulman.edu/cgi/viewcontent.cgi?article=1387&context=rhumj). It uses a spiral determined through experimental evidence. The method achieves spacings close to theoretical bounds and is especially efficient for a large number of nodes.
 - **Mathematical Description:** The exact mathematical formulation is based on the special spiral introduced by Jonathan Kogan in his 2017 paper. The provided Python code gives a glimpse into the method's implementation.
 - **Code Example**
 ```python
