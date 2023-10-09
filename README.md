@@ -137,22 +137,17 @@ def fibonacci_lattice_on_sphere(radius, num_points):
 - **Description:** Mathematical designs that guarantee certain uniformity levels. They can be hard to construct but offer very uniform distributions.
 - **Mathematical Description:** T-designs guarantee that any set of$T$ points is in roughly the same configuration as any other set of$T$ points on the sphere. The exact mathematical formulation depends on the chosen T-design.
 
-#### 5. Iterative Refinement
-- **Brief:** Refines initial placements through iterations.
-- **Description:** Starts with a basic distribution (e.g., random) and refines node positions iteratively. Nodes are moved to reduce system energy, such as electrostatic repulsion.
-- **Mathematical Description:** The method starts with an initial distribution and iteratively moves the points based on a chosen energy function (e.g., electrostatic repulsion). The mathematical details depend on the specific energy function and refinement criteria.
-
-#### 6. Spherical Cap Packing
+#### 5. Spherical Cap Packing
 - **Brief:** Packs spherical caps uniformly.
 - **Description:** Packs spherical caps of a certain size on the sphere. This method is complex but can offer uniform distributions for specific node counts.
 - **Mathematical Description:** Nodes are placed based on the packing of spherical caps on the sphere. The exact mathematical formulation depends on the size and arrangement of the caps.
 
-#### 7. HEALPix Grid
+#### 6. HEALPix Grid
 - **Brief:** Divides sphere into equal-area pixels.
 - **Description:** Divides the sphere into equal-area pixels. This method is commonly used in astrophysics, and nodes can be placed at pixel centers.
 - **Mathematical Description:** The HEALPix method divides the sphere into equal-area pixels. The mathematical formulation is complex and involves hierarchical equal area isolatitude pixelization.
 
-#### 8. Equidistant Archimedean Spiral
+#### 7. Equidistant Archimedean Spiral
 - **Brief:** Projects an Archimedean spiral onto the sphere.
 - **Description:** Uses the Archimedean spiral properties in the plane and projects them onto the sphere. This approach provides a fairly uniform initial distribution.
 - **Mathematical Description:**
@@ -235,7 +230,7 @@ def archimedes_points_on_sphere(radius, num_points):
     return points
 ```
 
-#### 9. Kogan's Spiral Method (2017)
+#### 8. Kogan's Spiral Method (2017)
 - **Brief:** Uses a special spiral for efficient placements.
 - **Description:** A computationally efficient method introduced by Jonathan Kogan in 2017. It uses a spiral determined through experimental evidence. The method achieves spacings close to theoretical bounds and is especially efficient for a large number of nodes.
 - **Mathematical Description:** The exact mathematical formulation is based on the special spiral introduced by [Jonathan Kogan in his 2017 paper](https://scholar.rose-hulman.edu/cgi/viewcontent.cgi?article=1387&context=rhumj). The provided Python code gives a glimpse into the method's implementation.
@@ -306,7 +301,7 @@ def kogan_sphere_points(samples, radius=1.0):
     
     return points
 ```
-#### 10. The Golden Spiral Phyllotaxis
+#### 9. The Golden Spiral Phyllotaxis
 - **Brief:** Distribution method inspired by patterns found in nature.
 - **Description:** The Golden Spiral Phyllotaxis method is a way of distributing points evenly over the surface of a sphere. This method is inspired by patterns found in nature, such as the arrangement of seeds on a sunflower head or the scales of a pinecone. The idea is to use the golden ratio to distribute points evenly on a sphere. This method is often preferred over random distribution or other deterministic methods because it tends to provide an even distribution without visible clusters or gaps.
 
@@ -369,8 +364,8 @@ def phyllotaxis_points_on_sphere(radius, num_points):
 
     return points
 ```
-#### 11. Voronoi Relaxation (Spherical Lloyd's Algorithm)
-- **Brief:** Voronoi-based iterative refinement.
+#### 10. Voronoi Relaxation (Spherical Lloyd's Algorithm)
+- **Brief:** Voronoi-based _iterative refinement_. This could be an intresting simulation option.
 - **Description:** Starts with a random or structured distribution of nodes on the sphere. A Voronoi diagram is computed for these nodes on the spherical surface, and each node is moved to the centroid of its Voronoi cell. The process is repeated until convergence. This results in a distribution that minimizes the variance of distances between nodes, leading to a more uniform distribution.
 - **Mathematical Description:** Nodes are placed based on the Voronoi diagram computed on the spherical surface. Each node is then moved to the centroid of its Voronoi cell. The mathematical details involve the computation of the Voronoi diagram and centroids on the sphere.
 
