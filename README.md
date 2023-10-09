@@ -237,8 +237,8 @@ def archimedes_points_on_sphere(radius, num_points):
 
 #### 9. Kogan's Spiral Method (2017)
 - **Brief:** Uses a special spiral for efficient placements.
-- **Description:** A computationally efficient method introduced by [Jonathan Kogan in 2017](https://scholar.rose-hulman.edu/cgi/viewcontent.cgi?article=1387&context=rhumj). It uses a spiral determined through experimental evidence. The method achieves spacings close to theoretical bounds and is especially efficient for a large number of nodes.
-- **Mathematical Description:** The exact mathematical formulation is based on the special spiral introduced by Jonathan Kogan in his 2017 paper. The provided Python code gives a glimpse into the method's implementation.
+- **Description:** A computationally efficient method introduced by Jonathan Kogan in 2017. It uses a spiral determined through experimental evidence. The method achieves spacings close to theoretical bounds and is especially efficient for a large number of nodes.
+- **Mathematical Description:** The exact mathematical formulation is based on the special spiral introduced by [Jonathan Kogan in his 2017 paper](https://scholar.rose-hulman.edu/cgi/viewcontent.cgi?article=1387&context=rhumj). The provided Python code gives a glimpse into the method's implementation.
 - **Code Example**
 ```python
 import math
@@ -312,29 +312,63 @@ def kogan_sphere_points(samples, radius=1.0):
 
 The key property of the golden ratio is that it is "the most irrational number," meaning it provides the best resistance to forming simple fraction approximations. This property helps in avoiding clusters and gaps when distributing points on a sphere.
 - **Mathematical Description:**
-### 1. The Golden Angle:
+##### 1. The Golden Angle:
 The Golden Angle ( $\phi$ ) is based on the Golden Ratio ( $\Phi$ ), which is approximately $1.61803398875$. The Golden Angle is given by:
 
 $$\phi = 2\pi(1 - \frac{1}{\Phi}) = 2\pi(1 - \frac{1}{1.61803398875})$$
 
-### 2. Point Placement:
+##### 2. Point Placement:
 For each point$i$ (starting from $i = 0$ to $n-1$, where $n$ is the total number of points, in this case, 80), the height ( $y_i$ ) and the radius in the xy-plane ( $r_i$ ) are calculated as:
 
 $$y_i = 1 - \frac{i}{n} - \frac{1}{2n}$$
 $$r_i = \sqrt{1 - y_i^2}$$
 
-### 3. Angle Calculation:
+##### 3. Angle Calculation:
 The angle for each point is given by:
 
 $$\theta_i = \phi \times i$$
 
-### 4. Cartesian Coordinates:
+##### 4. Cartesian Coordinates:
 Finally, we can convert the cylindrical coordinates ( $r_i, \theta_i, y_i$ ) to Cartesian coordinates:
 
 $$x_i = \cos(\theta_i) \times r_i$$
 $$y_i = \sin(\theta_i) \times r_i$$
 $$z_i = y_i$$
+- **Code Example**
+```python
+import numpy as np
 
+def phyllotaxis_points_on_sphere(radius, num_points):
+    """
+    Calculate points on a sphere using the Golden Spiral Phyllotaxis method.
+    
+    Parameters:
+    - radius: Radius of the sphere.
+    - num_points: Number of points to be placed on the sphere.
+    
+    Returns:
+    - An array of shape (num_points, 3) containing the x, y, z coordinates of the points.
+    """
+    
+    # Golden ratio
+    Phi = (1 + np.sqrt(5)) / 2
+    # Golden angle
+    phi = 2 * np.pi * (1 - 1/Phi)
+    
+    # Calculate the coordinates
+    theta = phi * np.arange(num_points)
+    y = 1 - 2 * (np.arange(num_points) / (num_points - 1))
+    r = np.sqrt(1 - y*y)
+    
+    points = []
+    for i in range(num_points):
+        x_i = np.cos(theta[i]) * r[i] * radius
+        y_i = y[i] * radius
+        z_i = np.sin(theta[i]) * r[i] * radius
+        points.append((x_i, y_i, z_i))
+
+    return points
+´´´
 #### 11. Voronoi Relaxation (Spherical Lloyd's Algorithm)
 - **Brief:** Voronoi-based iterative refinement.
 - **Description:** Starts with a random or structured distribution of nodes on the sphere. A Voronoi diagram is computed for these nodes on the spherical surface, and each node is moved to the centroid of its Voronoi cell. The process is repeated until convergence. This results in a distribution that minimizes the variance of distances between nodes, leading to a more uniform distribution.
