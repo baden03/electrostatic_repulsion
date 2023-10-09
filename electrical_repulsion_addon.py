@@ -106,6 +106,37 @@ def archimedes_points_on_sphere(radius, num_points):
     
     return points
 
+def phyllotaxis_points_on_sphere(radius, num_points):
+    """
+    Calculate points on a sphere using the Golden Spiral Phyllotaxis method.
+    
+    Parameters:
+    - radius: Radius of the sphere.
+    - num_points: Number of points to be placed on the sphere.
+    
+    Returns:
+    - An array of shape (num_points, 3) containing the x, y, z coordinates of the points.
+    """
+    
+    # Golden ratio
+    Phi = (1 + np.sqrt(5)) / 2
+    # Golden angle
+    phi = 2 * np.pi * (1 - 1/Phi)
+    
+    # Calculate the coordinates
+    theta = phi * np.arange(num_points)
+    y = 1 - 2 * (np.arange(num_points) / (num_points - 1))
+    r = np.sqrt(1 - y*y)
+    
+    points = []
+    for i in range(num_points):
+        x_i = np.cos(theta[i]) * r[i] * radius
+        y_i = y[i] * radius
+        z_i = np.sin(theta[i]) * r[i] * radius
+        points.append((x_i, y_i, z_i))
+
+    return points
+
 def electrostatic_repulsion(points, spheres, radius, iterations=500, time_step=0.005, k_constant=1, convergence_threshold=0):
     """Apply electrostatic repulsion to points until equilibrium, and animate the process."""    
     max_force_history = []
@@ -206,7 +237,8 @@ class ElectricalRepulsionProperties(bpy.types.PropertyGroup):
             ('RANDOM', "Random", "Distribute the initial points randomly"),
             ('FIBONACCI', "Fibonacci", "Distribute the initial points using a Fibonacci lattice"),
             ('KOGAN', "Kogan", "Distribute the initial points using the Kogan's Spiral method"),
-            ('ARCHIMEDES', "Archimedes", "Distribute the initial points using the Equidistant Archimedean Spiral method")
+            ('ARCHIMEDES', "Archimedes", "Distribute the initial points using the Equidistant Archimedean Spiral method"),
+            ('PHYLLOTAXIS', "Phyllotaxis", "Distribute the initial points using the Golden Spiral Phyllotaxis method")
         ],
         default='RANDOM'
     )
@@ -299,6 +331,8 @@ class WM_OT_ElectricalRepulsionOperator(bpy.types.Operator):
             points = np.array(kogan_points_on_sphere(radius, num_points))
         elif point_distribution_method == "ARCHIMEDES":
             points = np.array(archimedes_points_on_sphere(radius, num_points))
+        elif point_distribution_method == "PHYLLOTAXIS":
+            points = np.array(phyllotaxis_points_on_sphere(radius, num_points))
         else:
             points = np.array([random_point_on_sphere(radius) for _ in range(num_points)])
 
