@@ -368,7 +368,7 @@ def phyllotaxis_points_on_sphere(radius, num_points):
         points.append((x_i, y_i, z_i))
 
     return points
-´´´
+```
 #### 11. Voronoi Relaxation (Spherical Lloyd's Algorithm)
 - **Brief:** Voronoi-based iterative refinement.
 - **Description:** Starts with a random or structured distribution of nodes on the sphere. A Voronoi diagram is computed for these nodes on the spherical surface, and each node is moved to the centroid of its Voronoi cell. The process is repeated until convergence. This results in a distribution that minimizes the variance of distances between nodes, leading to a more uniform distribution.
