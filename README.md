@@ -157,9 +157,9 @@ def fibonacci_lattice_on_sphere(radius, num_points):
 - **Description:** Uses the Archimedean spiral properties in the plane and projects them onto the sphere. This approach provides a fairly uniform initial distribution.
 - **Mathematical Description:**
 1. **Theta Calculation**:
-    - The spiral is defined by the angle $\theta $, which varies linearly from 0 to a maximum value, $\text{max\_theta} $.
-    - The $\text{max\_theta} $ value is determined based on the desired number of points, $N $, and can be adjusted to ensure the spiral wraps around the sphere sufficiently:
-    $$\text{max\_theta} = \sqrt{N} \times \pi$$
+    - The spiral is defined by the angle $\theta $, which varies linearly from 0 to a maximum value, $`\text{max\_theta}`$.
+    - The $`\text{max\_theta}`$ value is determined based on the desired number of points, $N $, and can be adjusted to ensure the spiral wraps around the sphere sufficiently:
+    $`\text{max\_theta} = \sqrt{N} \times \pi`$
     
 2. **Radius Calculation**:
     - For each value of $\theta $, a corresponding radius $r $ is computed in polar coordinates:
